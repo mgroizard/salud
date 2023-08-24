@@ -22,3 +22,22 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\EventListener\ActivityListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }
+        calls:
+            - init:
+                - '@security.token_storage'
+                - '@logger'
+                - '@doctrine'
+    
+    App\EventListener\LoginSuccessEventListener:
+        tags:
+            - name: kernel.event_subscriber
+              dispatcher: security.event_dispatcher.login
+        calls:
+            - setContainer:
+                - '@service_container'
+                - '@logger'
+                - '@doctrine'
