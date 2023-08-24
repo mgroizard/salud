@@ -44,7 +44,7 @@ class UsuarioController extends BaseController
      */ 
     public function list(Request $request,EntityManagerInterface $em)
     {
-        return $this->successResponse($em->getRepository(Usuario::class)->findAll(),['user_simple_list']);
+        return $this->successResponse($em->getRepository(Usuario::class)->getQueryCollection($request),['user_simple_list']);
     }
 
     /**

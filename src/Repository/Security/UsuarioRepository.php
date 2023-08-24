@@ -3,8 +3,9 @@
 namespace App\Repository\Security;
 
 use App\Entity\Security\Usuario;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Repository\BaseRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @extends ServiceEntityRepository<Usuario>
@@ -14,7 +15,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Usuario[]    findAll()
  * @method Usuario[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UsuarioRepository extends ServiceEntityRepository
+class UsuarioRepository extends BaseRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -39,28 +40,31 @@ class UsuarioRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Usuario[] Returns an array of Usuario objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('u.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function getQueryCollection(Request $request)
+    {
+        $column = 'u.' . $request->get('order','created_at');
+        $dir    = $request->get('dir','ASC');
 
-//    public function findOneBySomeField($value): ?Usuario
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return [
+                'rows' => $this->getEntityManager()
+                                ->createQuery('SELECT u
+                                                FROM  ' . Usuario::class . ' u
+                                                WHERE (u.id LIKE ?1 OR u.nombre LIKE ?1 OR u.apellido LIKE ?1)
+                                            ORDER BY '. $column . ' ' . $dir)
+                                ->setParameter(1,'%'.$request->get('search','').'%')
+                                ->setMaxResults($request->get('length',100))
+                                ->setFirstResult($request->get('start',0))
+                                ->getResult(),
+                'total' => $this->getEntityManager()
+                                ->createQuery('SELECT COUNT(DISTINCT u) FROM  ' . Usuario::class . ' u ')
+                                ->getSingleScalarResult(),
+                'filtered' =>  $this->getEntityManager()
+                                    ->createQuery('SELECT COUNT(DISTINCT u)
+                                                     FROM  ' . Usuario::class . ' u
+                                                    WHERE (u.id LIKE ?1 OR u.nombre LIKE ?1 OR u.apellido LIKE ?1)
+                                                    ORDER BY '. $column . ' ' . $dir)
+                                    ->setParameter(1,'%'.$request->get('search','').'%')
+                                    ->getSingleScalarResult()
+        ];
+    }
 }

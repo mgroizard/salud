@@ -3,7 +3,7 @@
 namespace App\Repository\Security;
 
 use App\Entity\Security\EstadoUsuario;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Repository\BaseRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -14,7 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method EstadoUsuario[]    findAll()
  * @method EstadoUsuario[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class EstadoUsuarioRepository extends ServiceEntityRepository
+class EstadoUsuarioRepository extends BaseRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

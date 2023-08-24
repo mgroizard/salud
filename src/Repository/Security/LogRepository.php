@@ -3,7 +3,7 @@
 namespace App\Repository\Security;
 
 use App\Entity\Security\Log;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Repository\BaseRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -14,7 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Log[]    findAll()
  * @method Log[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class LogRepository extends ServiceEntityRepository
+class LogRepository extends BaseRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
