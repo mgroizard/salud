@@ -328,17 +328,34 @@ class UsuarioController extends BaseController
     }
 
     /**
-     * @Route("/{id}/actualizar/password" , name="user_update_password", methods={"put"})
+     *  Actualiza la contraseña el usuario
+     *
+     *  Actualiza la contraseña el usuario
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Contraseña actualizada con éxito",
+     * )
+     * @OA\Parameter(
+     *     name="usuario",
+     *     in="path",
+     *     description="El id de usuario",
+     *     @OA\Schema(type="integer")
+     * )
+     * @OA\Tag(name="Usuarios")
+     * @Security(name="Bearer")
+     * 
+     * @Route("/{usuario}/actualizar/password" , name="user_update_password", methods={"put"})
      */
-    public function udpatePassword(UserUpdatePassword $updateData, Usuario $id = null,EntityManagerInterface $em,UserPasswordHasherInterface $passwordHasher): JsonResponse
+    public function udpatePassword(UserUpdatePassword $updateData, Usuario $usuario = null,EntityManagerInterface $em,UserPasswordHasherInterface $passwordHasher): JsonResponse
     {   
         $this->denyAccessUnlessGranted('ROLE_CHANGE_PASSWORD');
-        if(!$user = $id){
+        if(!$usuario){
             return $this->json(['message' => 'Usuario no encontrado' , 'error' => null],404);
         }
         try {    
-            $updateData->updatePassword($user,$this->getUser(),$em,$passwordHasher);
-            $user->setEstado(new Activo());
+            $updateData->updatePassword($usuario,$this->getUser(),$em,$passwordHasher);
+            $usuario->setEstado(new Activo());
             $em->flush();
             return $this->json(['message' => 'Contraseña actualizada con éxito']);
         } catch (\Exception $e) {

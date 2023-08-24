@@ -8,10 +8,10 @@ app.swagger_ui:
     defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
 
 # config/routes.yaml
-app.swagger:
-    path: /api/docs.json
-    methods: GET
-    defaults: { _controller: nelmio_api_doc.controller.swagger }
+# app.swagger:
+#     path: /api/docs.json
+#     methods: GET
+#     defaults: { _controller: nelmio_api_doc.controller.swagger }
 
 # config/routes.yaml
 api_login_check:

@@ -17,7 +17,7 @@ nelmio_api_doc:
                 post:
                     tags:
                         - Login
-                    summary: Login into the api.
+                    summary: Login de la aplicación.
                     requestBody:
                         content:
                             application/json:
