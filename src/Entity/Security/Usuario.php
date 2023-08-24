@@ -21,6 +21,11 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
  * @ORM\Table(indexes={ @ORM\Index(name="email_idx", columns={"email"}),
  *                      @ORM\Index(name="created_at_index", columns={"created_at"})
  *            })
+ * @UniqueEntity(
+ *     fields={"email"},
+ *     errorPath="email",
+ *     message="El email '{{ value }}' ya se encuentra en uso."
+ * )
  */ 
 class Usuario implements JWTUserInterface, PasswordAuthenticatedUserInterface
 {
@@ -118,6 +123,8 @@ class Usuario implements JWTUserInterface, PasswordAuthenticatedUserInterface
         $this->logs = new ArrayCollection();
         $this->roles = new ArrayCollection();
         $this->setEstado(new Creado());
+        $this->password = strtoupper(substr(md5(uniqid('', true)), 0, 7));
+        $this->created_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -302,7 +309,7 @@ class Usuario implements JWTUserInterface, PasswordAuthenticatedUserInterface
     public function setEstado(?EstadoUsuario $estado): self
     {
         //solamente cambia el estado si es diferente al anterior
-        if($this->estado->getNombre() != $estado->getNombre() ) 
+        if(!$this->estado || ($this->estado->getNombre() != $estado->getNombre())) 
         {
             $this->estado = $estado;
             $estado->setUsuario($this);

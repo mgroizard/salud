@@ -12,7 +12,9 @@ use Doctrine\ORM\EntityManagerInterface;
 class User extends AbstractRequest
 {
     /**
-     * @Assert\Email(message: 'The email {{ value }} is not a valid email.')
+     * @Assert\Email(
+     *     message = "El email '{{ value }}' no es un email válido."
+     * )
      * @NotBlank()
      */
     public $email;

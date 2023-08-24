@@ -20,7 +20,12 @@ class UserUpdatePassword extends AbstractRequest
     /**
      * @Type("string")
      * @NotBlank()
-     * @Assert\Length(null,6,30)
+     * @Assert\Length(
+     *      min = 6,
+     *      max = 30,
+     *      minMessage = "La contraseña debe tener como mínimo {{ limit }} caracteres",
+     *      maxMessage = "La contraseña debe tener como máximo {{ limit }} caracteres"
+     * )
      */
     public $new_password;
 

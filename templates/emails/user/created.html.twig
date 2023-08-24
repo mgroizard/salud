@@ -1,0 +1,17 @@
+{% extends "emails/base.email.html.twig" %}
+
+{% block title %}
+<h1>Usuario Creado </h1>
+{% endblock %}
+
+{% block body %}
+<div><label>Id:</label>{{user.id}}</div>
+<div><label>Nombre:</label>{{user.nombre}}</div>
+<div><label>Apellido:</label>{{user.apellido}}</div>
+<div><label>Creado:</label>{{user.estado.createdAt|date('d/m/Y H:i:s')}}</div>
+<div><label>Password:</label>{{password}}</div>
+<a href="{{url}}" target="_blank">Activar Usuairo </a>
+
+{% endblock %}
+
+

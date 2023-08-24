@@ -49,7 +49,7 @@ class ActivityListener
                 if($data = json_decode($request->getContent(),true))
                 {
                     foreach ($data as $key => $value) {
-                        if($key == 'password'){
+                        if(str_contains($key,'password')){
                              $data[$key] = '**********';
                         }
                     }

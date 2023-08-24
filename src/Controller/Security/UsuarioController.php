@@ -56,7 +56,7 @@ class UsuarioController extends BaseController
 
         try {    
             //creo el nuevo usuario con los datos del userDTO
-            $user =  $userDTO->newUser($this->getUser(),$em);
+            $user =  $userDTO->newUsuario($this->getUser(),$em);
 
             //Hasheo la Password     
             $password = $user->getPassword();          
@@ -68,7 +68,7 @@ class UsuarioController extends BaseController
             $em->flush();
 
             $email = (new TemplatedEmail())
-            ->from('no-respondery@salud.gba.gov.ar')
+            ->from($this->getParameter('no_reply_address'))
             ->to($user->getEmail())
             ->subject('Usuario Creado - Ministerio de Salud de la Provincia de Buenos Aires')
             ->htmlTemplate('emails/user/created.html.twig')

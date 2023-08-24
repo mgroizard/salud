@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+<div class="position-absolute top-50 start-50 translate-middle">
+   <div class="card" style="width: 18rem;">
+      <div class="card-header"> <h5 class="card-title"> {{title}} </h5> </div>
+      <div class="card-body">
+         <p class="card-text">
+           Usuario: <strong>{{user.getUserIdentifier}}</strong>
+         </p>
+         <div class="alert alert-success">Mensaje: {{message}}</div>
+      </div>
+   </div>
+</div>
+{% endblock %}
