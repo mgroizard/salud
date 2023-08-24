@@ -24,16 +24,14 @@ class PublicController extends BaseController
      */
     public function activateUser(Request $request, Usuario $user, string $slug ,EntityManagerInterface $em, MailerInterface $mailer): Response
     {   
-        try {    
-            
+        try {     
             $fecha = $user->getCreatedAt()->modify('+2 days');
            
-            dump($user->getNeedsToBeActivated());die;
             if(($user->getToken() == $slug) && ( $fecha >= new \DateTime()) && $user->getNeedsToBeActivated())
-            {
-                
+            {            
                 $user->setEstado(new CambiarPassword());
                 $em->flush();
+    
                 $email = (new TemplatedEmail())
                 ->from($this->getParameter('no_reply_address'))
                 ->to($user->getEmail())
@@ -42,8 +40,9 @@ class PublicController extends BaseController
                 ->context([
                     'user' => $user,
                 ]);
+              
                 $mailer->send($email);
-            
+          
                 return $this->render('user/user.advice.html.twig',['user' => $user, 'message' => 'Activación del usuario con éxito', 'title' => 'Activación de Usuario']);
             }
             return $this->render('user/user.error.html.twig',['user' => $user, 'error' => 'El usuario ya se encuentra activo', 'title' => 'Activación de Usuario']);
@@ -53,7 +52,7 @@ class PublicController extends BaseController
     }
 
     /**
-     * @Route("/request/restore/password" , name="public_request_restore_password", methods={"post"})
+     * @Route("/solicitud/recupero/password" , name="public_request_restore_password", methods={"post"})
      */
     public function requestRestorePassword(UserRestorePassword $restore, EntityManagerInterface $em, MailerInterface $mailer): Response
     {   

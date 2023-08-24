@@ -48,6 +48,64 @@ class UsuarioController extends BaseController
     }
 
     /**
+     *  Crea un nuevo Usuario
+     *
+     *  Crea un nuevo Usuario
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Usuario creado con éxito",
+     * )
+     * @OA\RequestBody(
+     *     description="Datos para crear un usuario",
+     *     @OA\MediaType(
+     *        mediaType="application/json",
+     *        @OA\Schema(
+     *          type="object",
+     *          required={"email","nombre","apellido","roles"},
+     *          @OA\Property(
+     *             property="email",
+     *             description="Email único entre los demas usuarios del sistema",
+     *             type="number",
+     *             example="johndoe@mail.com"
+     *          ),
+     *          @OA\Property(
+     *             property="nombre",
+     *             description="Nombre del usuario",
+     *             type="string",
+     *             example="Juan"
+     *          ),
+     *          @OA\Property(
+     *             property="apellido",
+     *             description="Apellido del usuario",
+     *             type="string",
+     *             example="Pérez"
+     *          ),
+     *          @OA\Property(
+     *             property="password",
+     *             description="Contraseña del usuario, puede dejarse en blanco y se genera una automáticamente",
+     *             type="string",
+     *             example="p@ssw0rDtoCh4n63"
+     *          ),
+     *          @OA\Property(
+     *             property="roles",
+     *             description="Rol o roles del usuario dentro del sistema",
+     *             type="array",
+     *             @OA\Items(
+     *                
+     *                    type="integer",
+     *                    description="Identificador del rol en el sistema",
+     *                    example=1
+     *                 
+     *             ),
+     *             example="[1]"
+     *          ),
+     *       )
+     *     )
+     * )
+     * @OA\Tag(name="Usuarios")
+     * @Security(name="Bearer")
+     * 
      * @Route("" , name="user_create", methods={"post"})
      */
     public function create(UserDTO $userDTO,EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher,MailerInterface $mailer): JsonResponse
@@ -87,16 +145,74 @@ class UsuarioController extends BaseController
     }
 
     /**
-     * @Route("/{id}" , name="user_update", methods={"put"})
+     *  Actualiza un Usuario
+     *
+     *  Actualiza un Usuario
+     *
+     * @OA\Response(
+     *     response=200,
+     *     description="Usuario actualizado con éxito",
+     * )
+     * @OA\Parameter(
+     *     name="usuario",
+     *     in="path",
+     *     description="El id de usuario",
+     *     @OA\Schema(type="integer")
+     * )
+     * @OA\RequestBody(
+     *     description="Datos para actualizar un usuario",
+     *     @OA\MediaType(
+     *        mediaType="application/json",
+     *        @OA\Schema(
+     *          type="object",
+     *          required={"email","nombre","apellido","roles"},
+     *          @OA\Property(
+     *             property="email",
+     *             description="Email único entre los demas usuarios del sistema",
+     *             type="number",
+     *             example="johndoe@mail.com"
+     *          ),
+     *          @OA\Property(
+     *             property="nombre",
+     *             description="Nombre del usuario",
+     *             type="string",
+     *             example="Juan"
+     *          ),
+     *          @OA\Property(
+     *             property="apellido",
+     *             description="Apellido del usuario",
+     *             type="string",
+     *             example="Pérez"
+     *          ),
+     *          @OA\Property(
+     *             property="roles",
+     *             description="Rol o roles del usuario dentro del sistema",
+     *             type="array",
+     *             @OA\Items(
+     *                
+     *                    type="integer",
+     *                    description="Identificador del rol en el sistema",
+     *                    example=1
+     *                 
+     *             ),
+     *             example="[1]"
+     *          ),
+     *       )
+     *     )
+     * )
+     * @OA\Tag(name="Usuarios")
+     * @Security(name="Bearer")
+     * 
+     * @Route("/{usuario}" , name="user_update", methods={"put"})
      */
-    public function update(Usuario $id = null,UserUpdate $userDTO,EntityManagerInterface $em): JsonResponse
+    public function update(Usuario $usuario = null,UserUpdate $userDTO,EntityManagerInterface $em): JsonResponse
     {   
         $this->denyAccessUnlessGranted('ROLE_ADMIN_SALUD');
-        if(!$user = $id){
+        if(!$usuario){
             return $this->json(['message' => 'Usuario no encontrado' , 'error' => null],404);
         }
         try {    
-            $userDTO->updateUser($user,$this->getUser(),$em);
+            $userDTO->updateUser($usuario,$this->getUser(),$em);
             $em->flush();
             return $this->json(['message' => 'Usuario actualizado con éxito']);
         } catch (\Exception $e) {
