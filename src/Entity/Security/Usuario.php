@@ -378,8 +378,9 @@ class Usuario implements JWTUserInterface, PasswordAuthenticatedUserInterface
     
     /**
      * @Groups({"user_simple_list"})
+     * @return Collection<int, Role>
      */
-    public function getUserRoles()
+    public function getUserRoles(): ?Collection
     {
         return $this->roles;
     }
@@ -396,7 +397,7 @@ class Usuario implements JWTUserInterface, PasswordAuthenticatedUserInterface
     /**
      * @Groups({"user_simple_list"})
      */
-    public function getMustChangePassword()
+    public function getMustChangePassword():bool
     {
         return $this->estado->mustChangePassword();
     }
@@ -404,7 +405,7 @@ class Usuario implements JWTUserInterface, PasswordAuthenticatedUserInterface
     /**
      * @Groups({"user_simple_list"})
      */
-    public function getNeedsToBeActivated()
+    public function getNeedsToBeActivated():bool
     {
         return $this->estado->needsToBeActivated();
     }
@@ -471,8 +472,9 @@ class Usuario implements JWTUserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @Groups({"user_simple_list"})
+     * @return Collection<int, EstadoUsuario>
      */
-    public function getHistorialEstados()
+    public function getHistorialEstados():?Collection
     {
         return $this->estados;
     }
