@@ -40,31 +40,27 @@ class UsuarioRepository extends BaseRepository
         }
     }
 
-    public function getQueryCollection(Request $request)
+    public function getQueryRows()
     {
-        $column = 'u.' . $request->get('order','created_at');
-        $dir    = $request->get('dir','ASC');
+        return 'SELECT u FROM  ' . Usuario::class . ' u WHERE (u.id LIKE ?1 OR u.nombre LIKE ?1 OR u.apellido LIKE ?1)';
+    }
 
-        return [
-                'rows' => $this->getEntityManager()
-                                ->createQuery('SELECT u
-                                                FROM  ' . Usuario::class . ' u
-                                                WHERE (u.id LIKE ?1 OR u.nombre LIKE ?1 OR u.apellido LIKE ?1)
-                                            ORDER BY '. $column . ' ' . $dir)
-                                ->setParameter(1,'%'.$request->get('search','').'%')
-                                ->setMaxResults($request->get('length',100))
-                                ->setFirstResult($request->get('start',0))
-                                ->getResult(),
-                'total' => $this->getEntityManager()
-                                ->createQuery('SELECT COUNT(DISTINCT u) FROM  ' . Usuario::class . ' u ')
-                                ->getSingleScalarResult(),
-                'filtered' =>  $this->getEntityManager()
-                                    ->createQuery('SELECT COUNT(DISTINCT u)
-                                                     FROM  ' . Usuario::class . ' u
-                                                    WHERE (u.id LIKE ?1 OR u.nombre LIKE ?1 OR u.apellido LIKE ?1)
-                                                    ORDER BY '. $column . ' ' . $dir)
-                                    ->setParameter(1,'%'.$request->get('search','').'%')
-                                    ->getSingleScalarResult()
-        ];
+    public function getQueryTotal()
+    {
+        return 'SELECT COUNT(DISTINCT u) FROM  ' . Usuario::class . ' u ';
+    }
+
+    public function getQueryFiltered()
+    {
+        return 'SELECT COUNT(DISTINCT u) FROM  ' . Usuario::class . ' u WHERE (u.id LIKE ?1 OR u.nombre LIKE ?1 OR u.apellido LIKE ?1)';
+    }
+
+    public function getOrderColumn($column)
+    {
+        if(property_exists(Usuario::class,$column)){
+            return 'u. ' . $column;
+        }
+
+        return 'u.id';
     }
 }

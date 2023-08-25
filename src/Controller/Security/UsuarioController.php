@@ -32,7 +32,30 @@ class UsuarioController extends BaseController
      * Listado de usuarios del sistema.
      *
      * Listado de usuarios del sistema
-     *
+     * @OA\Parameter(
+     *     name="length",
+     *     in="query",
+     *     description="Longitud máxima de resultados a devolver, valor por defecto si no es enviado 100",
+     *     @OA\Schema(type="integer")
+     * )
+     * @OA\Parameter(
+     *     name="start",
+     *     in="query",
+     *     description="Desde qué página quiere el resultado de la consulta, valor por defecto si no es enviado 0",
+     *     @OA\Schema(type="integer")
+     * )
+     * @OA\Parameter(
+     *     name="order",
+     *     in="query",
+     *     description="Parámetro para ordenar el resultado, pueden ser, id, nombre, apellido, email, ultimoLogin, created_at, el valor por defecto si no es enviado o es incorrecto es id",
+     *     @OA\Schema(type="string")
+     * )
+     * @OA\Parameter(
+     *     name="dir",
+     *     in="query",
+     *     description="Parámetro para el sentido en el que se ordena el resultado, pueden ser ASC y DESC, valor por defecto si no es enviado, DESC",
+     *     @OA\Schema(type="string")
+     * )
      * @OA\Response(
      *     response=200,
      *     description="Devuelve un listado de usuarios del sistema",
@@ -44,7 +67,7 @@ class UsuarioController extends BaseController
      */ 
     public function list(Request $request,EntityManagerInterface $em)
     {
-        return $this->successResponse($em->getRepository(Usuario::class)->getQueryCollection($request),['user_simple_list']);
+        return $this->successResponse($em->getRepository(Usuario::class)->getQueryCollection($request),['user_simple_list','role_simple_list']);
     }
 
     /**
