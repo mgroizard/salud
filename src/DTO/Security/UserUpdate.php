@@ -28,6 +28,18 @@ class UserUpdate extends AbstractRequest
      * @NotBlank()
      */
     public $apellido;
+    
+    /**
+     * @Type("string")
+     * @NotBlank()
+     */
+    public $nro_documento;
+
+    /**
+     * @Type("integer")
+     * @NotBlank()
+     */
+    public $tipo_documento;
 
     /**
      * @Type("array")
@@ -37,8 +49,15 @@ class UserUpdate extends AbstractRequest
 
     public function updateUser(SecurityUsuario $userToUpdate, SecurityUsuario $user, EntityManagerInterface $em)
     {
+        $tipoDocumento = $em->getRepository(TipoDocumento::class)->find($this->tipo_documento);
+        if(!($tipoDocumento)){
+            throw new \Exception('TipoDocumento not found id: ' . $this->tipo_documento);
+        }
+
         $userToUpdate->setNombre($this->nombre)
              ->setApellido($this->apellido)
+             ->setTipoDocumento($tipoDocumento)
+             ->setNroDocumento($this->nro_documento)
              ->setEmail($this->email)
              ->setUpdatedBy($user)
              ;

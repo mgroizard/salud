@@ -67,7 +67,7 @@ class UsuarioController extends BaseController
      */ 
     public function list(Request $request,EntityManagerInterface $em)
     {
-        return $this->successResponse($em->getRepository(Usuario::class)->getQueryCollection($request),['user_simple_list','role_simple_list']);
+        return $this->successResponse($em->getRepository(Usuario::class)->getQueryCollection($request),['user_simple_list','role_simple_list','tipodocumento_simple_list']);
     }
 
     /**
@@ -85,7 +85,7 @@ class UsuarioController extends BaseController
      *        mediaType="application/json",
      *        @OA\Schema(
      *          type="object",
-     *          required={"email","nombre","apellido","roles"},
+     *          required={"email","nombre","apellido","roles","nro_documento","tipo_documento"},
      *          @OA\Property(
      *             property="email",
      *             description="Email único entre los demas usuarios del sistema",
@@ -103,6 +103,18 @@ class UsuarioController extends BaseController
      *             description="Apellido del usuario",
      *             type="string",
      *             example="Pérez"
+     *          ),
+     *          @OA\Property(
+     *             property="nro_documento",
+     *             description="Número de Documento",
+     *             type="string",
+     *             example="25417452"
+     *          ),
+     *          @OA\Property(
+     *             property="tipo_documento",
+     *             description="Identificador del Tipo de Documento",
+     *             type="integer",
+     *             example=1
      *          ),
      *          @OA\Property(
      *             property="password",
@@ -188,7 +200,7 @@ class UsuarioController extends BaseController
      *        mediaType="application/json",
      *        @OA\Schema(
      *          type="object",
-     *          required={"email","nombre","apellido","roles"},
+     *          required={"email","nombre","apellido","roles","nro_documento","tipo_documento"},
      *          @OA\Property(
      *             property="email",
      *             description="Email único entre los demas usuarios del sistema",
@@ -206,6 +218,18 @@ class UsuarioController extends BaseController
      *             description="Apellido del usuario",
      *             type="string",
      *             example="Pérez"
+     *          ),
+     *          @OA\Property(
+     *             property="nro_documento",
+     *             description="Número de Documento",
+     *             type="string",
+     *             example="25417452"
+     *          ),
+     *          @OA\Property(
+     *             property="tipo_documento",
+     *             description="Identificador del Tipo de Documento",
+     *             type="integer",
+     *             example=1
      *          ),
      *          @OA\Property(
      *             property="roles",
@@ -406,7 +430,7 @@ class UsuarioController extends BaseController
         $this->denyAccessUnlessGranted('ROLE_CHANGE_PASSWORD');
         
         try {
-            return $this->successResponse($this->getUser(),['user_simple_list','user_status_list','role_simple_list']);
+            return $this->successResponse($this->getUser(),['user_simple_list','user_status_list','role_simple_list','tipodocumento_simple_list']);
         } catch (\Exception $e) {
             return $this->returnErrorResponse('Error al obtener la información','user', $e->getMessage(),500);
         }        
@@ -440,7 +464,7 @@ class UsuarioController extends BaseController
             return $this->json(['message' => 'Usuario no encontrado' , 'error' => null],404);
         }
         try {
-            return $this->successResponse($usuario,['user_simple_list','user_status_list','role_simple_list']);
+            return $this->successResponse($usuario,['user_simple_list','user_status_list','role_simple_list','tipodocumento_simple_list']);
         } catch (\Exception $e) {
             return $this->returnErrorResponse('Error al obtener la información','user', $e->getMessage(),500);
         }        

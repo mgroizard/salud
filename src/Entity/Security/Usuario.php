@@ -117,6 +117,18 @@ class Usuario implements JWTUserInterface, PasswordAuthenticatedUserInterface
      */
     private $ultimoLogin;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=TipoDocumento::class)
+     * @Groups({"user_simple_list"})
+     */
+    private $tipoDocumento;
+
+    /**
+     * @ORM\Column(type="string", length=15, nullable=true)
+     * @Groups({"user_simple_list"})
+     */
+    private $nroDocumento;
+
     public function __construct()
     {
         $this->estados = new ArrayCollection();
@@ -480,5 +492,29 @@ class Usuario implements JWTUserInterface, PasswordAuthenticatedUserInterface
     public function setLastLogin()
     {
         $this->ultimoLogin = new \DateTimeImmutable();
+    }
+
+    public function getTipoDocumento(): ?TipoDocumento
+    {
+        return $this->tipoDocumento;
+    }
+
+    public function setTipoDocumento(?TipoDocumento $tipoDocumento): self
+    {
+        $this->tipoDocumento = $tipoDocumento;
+
+        return $this;
+    }
+
+    public function getNroDocumento(): ?string
+    {
+        return $this->nroDocumento;
+    }
+
+    public function setNroDocumento(?string $nroDocumento): self
+    {
+        $this->nroDocumento = $nroDocumento;
+
+        return $this;
     }
 }

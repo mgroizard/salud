@@ -3,6 +3,7 @@ namespace App\DTO\Security;
 
 use App\DTO\AbstractRequest;
 use App\Entity\Security\Role;
+use App\Entity\Security\TipoDocumento;
 use App\Entity\Security\Usuario as SecurityUsuario;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
@@ -37,6 +38,18 @@ class User extends AbstractRequest
     public $password;
 
     /**
+     * @Type("string")
+     * @NotBlank()
+     */
+    public $nro_documento;
+
+    /**
+     * @Type("integer")
+     * @NotBlank()
+     */
+    public $tipo_documento;
+
+    /**
      * @Type("array")
      * @NotBlank()
      */
@@ -44,10 +57,17 @@ class User extends AbstractRequest
 
     public function newUsuario(SecurityUsuario $creator, EntityManagerInterface $em)
     {
+        $tipoDocumento = $em->getRepository(TipoDocumento::class)->find($this->tipo_documento);
+        if(!($tipoDocumento)){
+            throw new \Exception('TipoDocumento not found id: ' . $this->tipo_documento);
+        }
+
         $user = new SecurityUsuario();
         $user->setNombre($this->nombre)
              ->setApellido($this->apellido)
              ->setEmail($this->email)
+             ->setTipoDocumento($tipoDocumento)
+             ->setNroDocumento($this->nro_documento)
              ->setCreatedBy($creator)
              ->generateToken()
              ;
