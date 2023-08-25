@@ -416,9 +416,10 @@ class UsuarioController extends BaseController
      *
      *  Devuelve la información del usuario autenticado en el sistema
      *
-     * @OA\Response(
+     *  @OA\Response(
      *     response=200,
-     *     description=" Devuelve la información del usuario autenticado en el sistema",
+     *     description="Devuelve la información del usuario autenticado en el sistema",
+     *     @Model(type=Usuario::class, groups={"user_simple_list","user_status_list","role_simple_list","tipodocumento_simple_list"})
      * )
      * @OA\Tag(name="Usuarios")
      * @Security(name="Bearer")
@@ -443,7 +444,7 @@ class UsuarioController extends BaseController
      * 
      *  @OA\Response(
      *     response=200,
-     *     description=" Devuelve la información del usuario enviado por parámetro",
+     *     description="Devuelve la información del usuario enviado por parámetro",
      *     @Model(type=Usuario::class, groups={"user_simple_list","user_status_list","role_simple_list","tipodocumento_simple_list"})
      * )
      * @OA\Parameter(
