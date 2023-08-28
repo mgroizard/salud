@@ -32,6 +32,14 @@ class UsuarioController extends BaseController
      * Listado de usuarios del sistema.
      *
      * Listado de usuarios del sistema
+     *  @OA\Response(
+     *     response=200,
+     *     description="Devuelve la información del usuario enviado por parámetro",
+     *     @OA\JsonContent(
+     *        type="array",
+     *         @OA\Items(ref=@Model(type=Usuario::class, groups={"user_simple_list","user_status_list","role_simple_list","tipodocumento_simple_list"}))
+     *     )
+     * )
      * @OA\Parameter(
      *     name="length",
      *     in="query",
@@ -55,10 +63,6 @@ class UsuarioController extends BaseController
      *     in="query",
      *     description="Parámetro para el sentido en el que se ordena el resultado, pueden ser ASC y DESC, valor por defecto si no es enviado, DESC",
      *     @OA\Schema(type="string")
-     * )
-     * @OA\Response(
-     *     response=200,
-     *     description="Devuelve un listado de usuarios del sistema",
      * )
      * @OA\Tag(name="Usuarios")
      * @Security(name="Bearer")
